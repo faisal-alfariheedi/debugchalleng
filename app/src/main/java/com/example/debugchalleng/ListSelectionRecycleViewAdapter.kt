@@ -15,8 +15,8 @@ class ListSelectionRecyclerViewAdapter(private val stateAndCapitals: ArrayList<A
     }
 
     override fun onBindViewHolder(holder: ListSelectionViewHolder, position: Int) {
-        holder.listPosition.text = (position).toString()
-        holder.listTitle.text = "${stateAndCapitals[position][0]} : ${stateAndCapitals[position][1]}"
+        holder.listPosition.text = (position+1).toString()                                            //fixed by adding 1 to position
+        holder.listTitle.text = "${stateAndCapitals[position][0]} : ${stateAndCapitals[position][1]}"//fixed by adding ${stateAndCapitals[position][0]} :
     }
 
     override fun getItemCount(): Int {
