@@ -85,6 +85,6 @@ class MainActivity : AppCompatActivity() {
         listsRecyclerView = findViewById(R.id.lists_recyclerview)
         listsRecyclerView.layoutManager = LinearLayoutManager(this)
         listsRecyclerView.adapter =
-            ListSelectionRecyclerViewAdapter(arrayListOfCountriesAndCapitals)
+            ListSelectionRecyclerViewAdapter(arrayListOfCountriesAndCapitals,this)
     }
 }
