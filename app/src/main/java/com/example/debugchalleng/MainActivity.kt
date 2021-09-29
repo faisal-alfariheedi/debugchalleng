@@ -1,5 +1,7 @@
 package com.example.debugchalleng
 
+import android.content.Context
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -16,6 +18,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var listsRecyclerView: RecyclerView
     lateinit var fabButton: FloatingActionButton
     lateinit var alertDialogSubmitBtn: Button
+    private lateinit var sp: SharedPreferences
     private var arrayListOfCountriesAndCapitals = arrayListOf(
         arrayListOf("Saudi Arabia", "Riyadh"),
         arrayListOf("Nigeria", "Abuja"),
@@ -28,6 +31,9 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        restores_save(true)
+
 
         fabButton = findViewById(R.id.fabBtn)
         setupRecyclerView()
@@ -57,17 +63,20 @@ class MainActivity : AppCompatActivity() {
 
                     }else {
 
-                    //Add both texts to list
-                    singleUserEntryList.add(countryText)
-                    singleUserEntryList.add(capitalText)
+                        //Add both texts to list
+                        singleUserEntryList.add(countryText)
+                        singleUserEntryList.add(capitalText)
 
-                    //Add single entry list to Global list
-                    arrayListOfCountriesAndCapitals.add(singleUserEntryList)
+                        //Add single entry list to Global list
+                        arrayListOfCountriesAndCapitals.add(singleUserEntryList)
 
-                    alertDialog.dismiss()
+                        restores_save(false)
+
+                        alertDialog.dismiss()
                 }
             }
         }
+
     }
 
     private fun setupAlertDialog(): Pair<View, AlertDialog> {
@@ -86,5 +95,26 @@ class MainActivity : AppCompatActivity() {
         listsRecyclerView.layoutManager = LinearLayoutManager(this)
         listsRecyclerView.adapter =
             ListSelectionRecyclerViewAdapter(arrayListOfCountriesAndCapitals,this)
+    }
+
+    private fun restores_save(which:Boolean){
+        sp = getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE)
+        if(which) {
+            for (i in 5..(sp.getInt("size", 0))) {//this will get the saved data start from 5 becuse the first 5 values are given above
+                arrayListOfCountriesAndCapitals.add(arrayListOf(sp.getString("cc $i 1", "").toString(), sp.getString("cc $i 2", "").toString()))
+            }
+        }else{
+            for (i in arrayListOfCountriesAndCapitals) {//this will save the data
+                with(sp.edit()) {
+                    putString("cc ${arrayListOfCountriesAndCapitals.indexOf(i)} 1", i[0].toString())
+                    putString("cc ${arrayListOfCountriesAndCapitals.indexOf(i)} 2", i[1].toString())
+                    apply()
+                }
+            }
+        }
+        with(sp.edit()) {
+            putInt("size", arrayListOfCountriesAndCapitals.size - 1)
+            apply()
+        }
     }
 }
