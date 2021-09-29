@@ -10,6 +10,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.snackbar.Snackbar
 
 class MainActivity : AppCompatActivity() {
     lateinit var listsRecyclerView: RecyclerView
@@ -38,26 +39,34 @@ class MainActivity : AppCompatActivity() {
             //AlertDialog
             val (dialogView, alertDialog) = setupAlertDialog()
 
-            //Initialize edit texts
-            val countryET = dialogView.findViewById<EditText>(R.id.countryEt)
-            val capitalET = dialogView.findViewById<EditText>(R.id.capitalEt)
 
-            //Store user's input text to variables
-            val countryText = countryET.text.toString()
-            val capitalText = capitalET.text.toString()
+                alertDialogSubmitBtn.setOnClickListener {
 
+                    ///////////////////////////////////////////  moved from outside of the submit button to inside to get the entered value
+                    //Initialize edit texts
+                    val countryET = dialogView.findViewById<EditText>(R.id.countryEt)
+                    val capitalET = dialogView.findViewById<EditText>(R.id.capitalEt)
 
-            alertDialogSubmitBtn.setOnClickListener {
-                //Add both texts to list
-                singleUserEntryList.add(countryText)
-                singleUserEntryList.add(capitalText)
+                    //Store user's input text to variables
+                    val countryText = countryET.text.toString()
+                    val capitalText = capitalET.text.toString()
+                    /////////////////////////////////////////////////////////////////////////////////////////
 
-                //Add single entry list to Global list
-                arrayListOfCountriesAndCapitals.add(singleUserEntryList)
+                    if(countryText.isEmpty()||capitalText.isEmpty()){
+                        Snackbar.make(findViewById(R.id.mscreen),"it can`t be empty ",Snackbar.LENGTH_LONG).show()
 
-                alertDialog.dismiss()
+                    }else {
+
+                    //Add both texts to list
+                    singleUserEntryList.add(countryText)
+                    singleUserEntryList.add(capitalText)
+
+                    //Add single entry list to Global list
+                    arrayListOfCountriesAndCapitals.add(singleUserEntryList)
+
+                    alertDialog.dismiss()
+                }
             }
-
         }
     }
 
